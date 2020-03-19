@@ -3,7 +3,7 @@ import os
 import socket
 import requests, json
 from random import random
-from flask import jsonify, request, redirect, url_for
+from flask import jsonify, request, redirect, url_for, make_response
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -84,6 +84,34 @@ def login():
 
       # POST: run template.py and open template.html in browser
       # GET: /login?name=superman
+
+##############################
+# Receiving and returning JSON
+##############################
+
+@app.route("/json", methods = ["POST"])
+def json_example():
+
+    # Check if the request body contains JSON
+    if request.is_json:
+
+        # Parse the JSON into a Python dictionary
+        req = request.get_json()
+
+        # Static response body
+        response_body = {
+            "message": "JSON received!"
+        }
+
+        # Create JSON response
+        res = make_response(jsonify(response_body), 200)
+
+        # Return JSON response
+        return res
+
+    else:
+        # The request body is not JSON
+        return make_response(jsonify({"message": "Request body must be JSON"}), 400)
 
 
 if __name__ == "__main__":
