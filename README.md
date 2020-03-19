@@ -5,7 +5,7 @@
 2. packages see requirements.txt
 
 ## Develop
-1. ``pip install requirements.txt``
+1. ``pip3 install requirements.txt``
 2. start with ``python3 template.py``
 3. add whichever route you want, and do whatever you want regarding
 to algorithms, requests, data processing, data mining,
