@@ -45,12 +45,12 @@ def hello_name(name):
 # Integer
 @app.route('/item/<int:itemID>')
 def show_item(itemID):
-   return 'Item number %d:' % itemID
+    return 'Item number %d:' % itemID
 
 # Float
 @app.route('/version/<float:versionNo>')
 def show_version(versionNo):
-   return 'Version number %f:' % versionNo
+    return 'Version number %f:' % versionNo
 
 ##################
 # Named parameters
@@ -75,15 +75,15 @@ def show_hero():
 # ...also introducing redirect and url_for
 @app.route('/login', methods = ['POST', 'GET'])
 def login():
-   if request.method == 'POST':
-      name = request.form['name']
-      return redirect(url_for('hello_name', name = name))
-   else:
-      name = request.args.get('name')
-      return redirect(url_for('hello_name', name = name))
+    if request.method == 'POST':
+        name = request.form['name']
+        return redirect(url_for('hello_name', name = name))
+    else:
+        name = request.args.get('name')
+        return redirect(url_for('hello_name', name = name))
 
-      # POST: run template.py and open template.html in browser
-      # GET: /login?name=superman
+    # POST: run template.py and open template.html in browser
+    # GET: /login?name=superman
 
 ##############################
 # Receiving and returning JSON
@@ -95,12 +95,75 @@ def json_example():
     # Check if the request body contains JSON
     if request.is_json:
 
-        # Parse the JSON into a Python dictionary
+        # Parse JSON into a Python dictionary
         req = request.get_json()
 
         # Static response body
         response_body = {
             "message": "JSON received!"
+        }
+
+        # Create JSON response
+        res = make_response(jsonify(response_body), 200)
+
+        # Return JSON response
+        return res
+
+    else:
+        # The request body is not JSON
+        return make_response(jsonify({"message": "Request body must be JSON"}), 400)
+
+#################
+# Delille example
+#################
+
+# Citations per verse per type of author
+@app.route("/delille/piechart", methods = ["POST"])
+def delille_piechart1():
+
+    # Check if the request body contains JSON
+    if request.is_json:
+
+        # Parse JSON into a Python dictionary
+        req = request.get_json()
+
+        # Getting iterable of actual results
+        bindings = req["results"]["bindings"]
+
+        # Total numbers of interest
+        sum_menOfLetters = 0
+        sum_vulgarizers  = 0
+        sum_artists      = 0
+        sum_others       = 0
+
+        # Check number of citations for each verse
+        # and add it to the total number
+        for i in bindings:
+            sum_menOfLetters += int(i["menOfLetters"]["value"])
+            sum_vulgarizers  += int(i["vulgarizers"]["value"])
+            sum_artists      += int(i["artists"]["value"])
+            sum_others       += int(i["otherRoles"]["value"])
+
+        # Create response body
+        response_body = {
+            "data": [
+                {
+                    "label": "Men of letters",
+                    "value": sum_menOfLetters
+                },
+                {
+                    "label": "Vulgarizers",
+                    "value": sum_vulgarizers
+                },
+                {
+                    "label": "Artists",
+                    "value": sum_artists
+                },
+                {
+                    "label": "Others",
+                    "value": sum_others
+                }
+            ]
         }
 
         # Create JSON response
