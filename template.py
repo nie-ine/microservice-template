@@ -179,6 +179,9 @@ def delille_piechart():
 def transform():
     if request.method == "POST":
 
+        if not os.path.exists("temp_files"):
+            os.makedirs("temp_files")
+            
         # Get data and save as file
         data = request.form["data"]
         data_name = request.form["data_name"]
