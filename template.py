@@ -181,19 +181,21 @@ def transform():
 
         # Get data and save as file
         data = request.form["data"]
-        df = open("temp_files/yourData.json", "w+")
+        data_name = request.form["data_name"]
+        df = open("temp_files/%s" % data_name, "w+")
         df.write(data)
         df.close()
 
         # Get code and save as file
         code = request.form["code"]
-        cf = open("temp_files/yourCode.py", "w+")
+        code_name = request.form["code_name"]
+        cf = open("temp_files/%s" % code_name, "w+")
         cf.write(code)
         cf.close()
 
         # Enter temp_files directory and execute code file
         os.chdir("temp_files")
-        process = subprocess.run(["python3", "yourCode.py"], check = True, stdout = subprocess.PIPE, universal_newlines = True)
+        process = subprocess.run(["python3", code_name], check = True, stdout = subprocess.PIPE, universal_newlines = True)
         # Save output
         output = process.stdout
 

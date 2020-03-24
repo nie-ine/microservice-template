@@ -14,8 +14,8 @@
     <body>
         <form action="http://localhost:8080/transform" method="POST">
             <div>
-                <input class="filename" type="text" placeholder="yourData.json" readonly>
-                <input class="filename" type="text" placeholder="yourCode.py" readonly>
+                <input class="filename" name="data_name" type="text" placeholder="Enter a filename (e.g. yourData.json)">
+                <input class="filename" name="code_name" type="text" placeholder="Enter a filename (e.g. yourCode.py)">
             </div>
             <div>
                 <textarea class="inputarea" name="data" placeholder="Insert JSON data here"></textarea>
