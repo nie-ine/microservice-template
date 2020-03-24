@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <title>Transform</title>
+        <style>
+            .filename {
+                width: 40%;
+            }
+            .inputarea {
+                height: 80%;
+                width: 40%;
+            }
+        </style>
+    </head>
+    <body>
+        <form action="http://localhost:8080/transform" method="POST">
+            <div>
+                <input class="filename" type="text" placeholder="yourData.json" readonly>
+                <input class="filename" type="text" placeholder="yourCode.py" readonly>
+            </div>
+            <div>
+                <textarea class="inputarea" name="data" placeholder="Insert JSON data here"></textarea>
+                <textarea class="inputarea" name="code" placeholder="Insert Python code here"></textarea>
+                <!-- <input class="inputarea" name="data" type="text"/> -->
+                <!-- <input class="inputarea" name="code" type="text"/> -->
+                <p><input type="submit" value="Submit" /></p>
+            </div>
+        </form>
+    </body>
+</html>
