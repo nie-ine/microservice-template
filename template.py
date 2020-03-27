@@ -217,7 +217,8 @@ def code():
             # Leave temp_files directory
             os.chdir("..")
 
-            return process
+            return render_template("output.html", output=process)
+            #process
 
     else:
         return render_template("code.html")
