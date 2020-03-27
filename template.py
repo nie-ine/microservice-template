@@ -60,7 +60,7 @@ def show_version(versionNo):
 
 @app.route("/hero")
 def show_hero():
-    name = request.args.get("name", default = "Nobody", type = str)
+    name = request.args.get("name", default="Nobody", type=str)
     return "%s will save you!" % name.capitalize()
 
     # /hero?name=batman
@@ -75,11 +75,11 @@ def show_hero():
 
 # POST & GET
 # ...also introducing redirect and url_for
-@app.route("/login", methods = ["POST", "GET"])
+@app.route("/login", methods=["POST", "GET"])
 def login():
-    if request.method == "POST":
-        name = request.form["name"]
-        return redirect(url_for("hello_name", name = name))
+    if request.method=="POST":
+        name=request.form["name"]
+        return redirect(url_for("hello_name", name=name))
     else:
         return render_template("login.html")
 
@@ -87,7 +87,7 @@ def login():
 # Receiving and returning JSON
 ##############################
 
-@app.route("/json", methods = ["POST"])
+@app.route("/json", methods=["POST"])
 def json_example():
 
     # Check if the request body contains JSON
@@ -116,7 +116,7 @@ def json_example():
 #################
 
 # Citations per verse per type of author
-@app.route("/delille/piechart", methods = ["POST"])
+@app.route("/delille/piechart", methods=["POST"])
 def delille_piechart():
 
     # Check if the request body contains JSON
@@ -175,44 +175,53 @@ def delille_piechart():
         return make_response(jsonify({"message": "Request body must be JSON"}), 400)
 
 
-@app.route("/transform", methods = ["POST", "GET"])
-def transform():
-    if request.method == "POST":
+@app.route("/code", methods=["POST","GET"])
+def code():
 
+    if request.method == "POST":
         if not os.path.exists("temp_files"):
             os.makedirs("temp_files")
-            
+
         # Get data and save as file
         data = request.form["data"]
-        data_name = request.form["data_name"]
+        data_name = request.form["d_name"]
         df = open("temp_files/%s" % data_name, "w+")
         df.write(data)
         df.close()
 
         # Get code and save as file
         code = request.form["code"]
-        code_name = request.form["code_name"]
+        code_name = request.form["c_name"]
         cf = open("temp_files/%s" % code_name, "w+")
         cf.write(code)
         cf.close()
 
         # Enter temp_files directory and execute code file
         os.chdir("temp_files")
-        process = subprocess.run(["python3", code_name], check = True, stdout = subprocess.PIPE, universal_newlines = True)
-        # Save output
-        output = process.stdout
 
-        # Delete saved files
-        files = glob.glob("*")
-        for f in files:
-            os.remove(f)
+        # ToDO: Show actual error message if CalledProcessError
+        try:
+            process = subprocess.check_output(
+                ["python3", code_name],
+                universal_newlines=True)
+        except subprocess.CalledProcessError as e:
+            # Leave temp_files directory
+            os.chdir("..")
+            return "Something is wrong with your code!"
+        else:
+            # Delete any saved files
+            files = glob.glob("*")
+            for f in files:
+                os.remove(f)
 
-        # Leave temp_files directory
-        os.chdir("..")
+            # Leave temp_files directory
+            os.chdir("..")
 
-        return output
+            return process
+
     else:
-        return render_template("transform.html")
+        return render_template("code.html")
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080, debug=True)

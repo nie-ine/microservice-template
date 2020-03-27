@@ -1,0 +1,110 @@
+<!DOCTYPE html5>
+<html>
+    <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.8/ace.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <title>Code</title>
+        <style>
+            #d_name {
+                margin: 0;
+                position: absolute;
+                margin: 0;
+                left: 2%;
+                width: 45%;
+            }
+
+            #d_editor {
+                margin: 0;
+                position: absolute;
+                top: 8%;
+                bottom: 20%;
+                left: 2%;
+                right: 0;
+                width: 45%;
+            }
+
+            #c_name {
+                margin: 0;
+                position: absolute;
+                left: 52%;
+                width: 45%;
+            }
+
+            #c_editor {
+                margin: 0;
+                position: absolute;
+                top: 8%;
+                bottom: 20%;
+                left: 52%;
+                right: 0;
+                width: 45%;
+            }
+
+            #submit {
+                margin: 0;
+                position: absolute;
+                margin: 0;
+                bottom: 10%;
+                left: 2%;
+            }
+        </style>
+    </head>
+    <body>
+        <form action="http://localhost:8080/code" method="POST">
+            <div>
+                <input id="d_name" name="d_name" type="text" value="yourData.json">
+                <input id="c_name" name="c_name" type="text" value="yourCode.py">
+            </div>
+
+<!-- Data editor and according textarea -->
+<div>
+<textarea name="data" id="data"></textarea>
+<div id="d_editor">{
+"message": "Hello World!"
+}
+</div>
+</div>
+
+<!-- Code editor and according textarea -->
+<div>
+<textarea name="code" id="code"></textarea>
+<div id="c_editor">import json
+    
+def show_message(json_file):
+    with open(json_file, 'r') as f:
+        content = json.load(f)
+
+    return content['message']
+
+if __name__ == "__main__":
+    print(show_message("yourData.json"))
+</div>
+</div>
+
+            <input id="submit" type="submit" value="Submit" />
+        </form>
+
+        <script>
+            // Data editor handling
+            var d_textarea = $('#data').hide();
+
+            var d_editor = ace.edit("d_editor");
+            d_editor.setTheme("ace/theme/monokai");
+            d_editor.session.setMode("ace/mode/json");
+            d_editor.setFontSize(16);
+
+            // Code editor handling
+            var c_textarea = $('#code').hide();
+
+            var c_editor = ace.edit("c_editor");
+            c_editor.setTheme("ace/theme/monokai");
+            c_editor.session.setMode("ace/mode/python");
+            c_editor.setFontSize(16);
+
+            $('#submit').click(function(){
+                d_textarea.val(d_editor.getSession().getValue());
+                c_textarea.val(c_editor.getSession().getValue());
+            });
+        </script>
+    </body>
+</html>
