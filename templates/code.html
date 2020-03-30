@@ -54,7 +54,6 @@ if __name__ == "__main__":
 </div>
 <input id="submit" type="submit" value="Submit" />
 </form>
-
 <div id="console">
 <pre id="output">
 {{ output }}
@@ -77,6 +76,7 @@ if __name__ == "__main__":
     c_editor.session.setMode("ace/mode/python");
     c_editor.setFontSize(16);
 
+    // Submit button
     $('#submit').click(function(){
         d_textarea.val(d_editor.getSession().getValue());
         c_textarea.val(c_editor.getSession().getValue());

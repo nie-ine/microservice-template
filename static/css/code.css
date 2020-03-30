@@ -30,11 +30,14 @@
     width: 45%;
 }
 #submit {
-    margin: 0;
     position: absolute;
-    margin: 0;
-    bottom: 25%;
+    bottom: 24%;
     left: 2%;
+    cursor: pointer;
+    background-color: #E3D872;
+    border: none;
+    padding: 10px 32px;
+    font-size: 16px;
 }
 #console {
     background: #272822;
