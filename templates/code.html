@@ -17,7 +17,7 @@
                 margin: 0;
                 position: absolute;
                 top: 8%;
-                bottom: 20%;
+                bottom: 30%;
                 left: 2%;
                 right: 0;
                 width: 45%;
@@ -34,7 +34,7 @@
                 margin: 0;
                 position: absolute;
                 top: 8%;
-                bottom: 20%;
+                bottom: 30%;
                 left: 52%;
                 right: 0;
                 width: 45%;
@@ -44,8 +44,24 @@
                 margin: 0;
                 position: absolute;
                 margin: 0;
-                bottom: 10%;
+                bottom: 25%;
                 left: 2%;
+            }
+
+            #console {
+                background: #272822;
+                color: #F8F8F2;
+                padding: 0px;
+                position: absolute;
+                top: 78%;
+                left: 2%;
+                right: 0;
+                width: 95%;
+                min-height: 20%;
+            }
+            #output {
+                padding: 10px;
+                font-size: 16px;
             }
         </style>
     </head>
@@ -81,9 +97,14 @@ if __name__ == "__main__":
     print(show_message("yourData.json"))
 </div>
 </div>
-
             <input id="submit" type="submit" value="Submit" />
         </form>
+
+<div id="console">
+<pre id="output">
+{{ output }}
+</pre>
+</div>
 
         <script>
             // Data editor handling
