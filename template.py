@@ -177,7 +177,6 @@ def delille_piechart():
 
 @app.route("/code", methods=["POST","GET"])
 def code():
-
     # POST
     if request.method == "POST":
         if not os.path.exists("temp_files"):
@@ -186,23 +185,28 @@ def code():
         # Do we need "REAL" form validation? In flask? (vs. Angular?)
 
         # Get data and temporarily save as file
-        data_name = request.form["d_name"]
-        if not data_name == "":
-            data = request.form["data"]
-            df = open("temp_files/%s" % data_name, "w+")
+        d_name = request.form["d_name"]
+        data = request.form["data"]
+        if not d_name == "":
+            df = open("temp_files/%s" % d_name, "w+")
             df.write(data)
             df.close()
 
         # Get code and temporarily save as file
-        code_name = request.form["c_name"]
+        c_name = request.form["c_name"]
         suffix = ".py"
-        if code_name.endswith(suffix):
-            code = request.form["code"]
-            cf = open("temp_files/%s" % code_name, "w+")
+        code = request.form["code"]
+        if c_name.endswith(suffix) and len(c_name) > 3:
+            cf = open("temp_files/%s" % c_name, "w+")
             cf.write(code)
             cf.close()
         else:
-            return render_template("code.html", output="Your filename has to end with '.py'")
+            return render_template("code.html",
+                output="Please enter a proper code filename ending with '.py'",
+                d_name=d_name,
+                data=data,
+                c_name=c_name,
+                code=code)
 
         # Enter temp_files directory and execute code file
         os.chdir("temp_files")
@@ -210,7 +214,7 @@ def code():
         # Try to run the cody with subprocess
         try:
             process = subprocess.check_output(
-                ["python3", code_name],
+                ["python3", c_name],
                 stderr=subprocess.STDOUT,
                 universal_newlines=True)
         # Check for error message
@@ -218,7 +222,12 @@ def code():
             # Leave temp_files directory
             os.chdir("..")
             # Return error message
-            return render_template("code.html", output=e.output)
+            return render_template("code.html",
+                output=e.output,
+                d_name=d_name,
+                data=data,
+                c_name=c_name,
+                code=code)
         # If run successfully, delete the temporarily saved files
         else:
             # Delete any saved files
@@ -230,10 +239,15 @@ def code():
             os.chdir("..")
 
             # Return output
-            return render_template("code.html", output=process)
+            return render_template("code.html", 
+                output=process,
+                d_name=d_name,
+                data=data,
+                c_name=c_name,
+                code=code)
     # GET
     else:
-        return render_template("code.html", output="")
+        return render_template("code.html")
 
 
 if __name__ == "__main__":
